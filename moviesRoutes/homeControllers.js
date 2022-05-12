@@ -12,7 +12,11 @@ exports.movies = async (req, res) => {
 
 exports.moviesTitles = async (req, res) => {
     const title = req.params.title
-    let results = await Movie.find({title: new RegExp(title, "i")})
+    const rates = req.params.rates
+    console.log(rates)
 
-    res.json(results)
+    let result = await Movie.find({title: new RegExp(title, "i"), rates: new RegExp(rates, "i")})
+    
+
+    res.json(result)
 }
