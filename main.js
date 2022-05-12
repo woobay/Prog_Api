@@ -1,5 +1,5 @@
 const express = require("express");
-const routes = require("./controller/routes")
+const routes = require("./moviesRoutes/routes")
 app = express();
 
 const mongoose = require("mongoose");
