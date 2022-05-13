@@ -10,18 +10,16 @@ exports.movies = async (req, res) => {
 }
 
 exports.moviesTitles = async (req, res) => {
-    const title = req.params.title
     const rates = req.params.rates
-    const limit = req.params.limit || 20
-    const pages = req.params.pages || 0
-    console.log(title, rates, limit, pages)
+
+
 
     let result = await Movie.where("title")
-    .equals(new RegExp(title, "i"))
+    .equals(new RegExp(req.params.title, "i"))
     .where("rated")
-    .equals({$exists: true, $ne: null})
-    .limit(limit)
-    .skip(limit * pages)
+    .equals(!!rates ? `${rates}` : {$exists: true, $ne: null})
+    .limit(req.params.limit || 20)
+    .skip(req.params.limit || 20 * req.params.pages || 0)
     
 
     res.json(result)
