@@ -12,8 +12,6 @@ exports.movies = async (req, res) => {
 exports.moviesTitles = async (req, res) => {
     const rates = req.params.rates
 
-
-
     let result = await Movie.where("title")
     .equals(new RegExp(req.params.title, "i"))
     .where("rated")
@@ -21,7 +19,6 @@ exports.moviesTitles = async (req, res) => {
     .limit(req.params.limit || 20)
     .skip(req.params.limit || 20 * req.params.pages || 0)
     
-
     res.json(result)
 }
 
