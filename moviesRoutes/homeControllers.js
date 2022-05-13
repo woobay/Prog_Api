@@ -4,7 +4,7 @@ const Review = require('../model/review')
 
 exports.movies = async (req, res) => {
 
-    let result = await Movie.find({}).limit(50)
+    let result = await Movie.find({})
 
     res.json(result)
 }
@@ -16,7 +16,8 @@ exports.moviesTitles = async (req, res) => {
     const pages = req.params.pages || 0
     console.log(title, rates, limit, pages)
 
-    let result = await Movie.find({title: new RegExp(title, "i")})
+    let result = await Movie.where("title")
+    .equals(new RegExp(title, "i"))
     .where("rated")
     .equals({$exists: true, $ne: null})
     .limit(limit)
