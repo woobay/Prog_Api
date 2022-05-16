@@ -1,13 +1,10 @@
-const express = require('express')
-const router = express.Router()
-const moviesRoutes = require('./homeControllers')
+const express = require('express');
+const router = express.Router();
+const homeController = require('./homeControllers');
 
-router.get("/api/v1/", moviesRoutes.movies)
-router.get("/api/v1/movies", moviesRoutes.movies)
-router.get("/api/v1/movies/:title?/:rates?/:limit?/:pages?", moviesRoutes.moviesTitles)
-
-router.get("/api/v1/rating", moviesRoutes.getRated)
-router.get("/api/v1/id/:id", moviesRoutes.getById)
+router.get("/api/v1/movies", homeController.movies)
+router.get("/api/v1/movies/rating", homeController.rating)
+router.get("/api/v1/movies/id/:id", homeController.searchById)
 
 
-module.exports = router
+module.exports = router;

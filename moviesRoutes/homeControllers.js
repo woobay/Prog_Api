@@ -1,40 +1,43 @@
-const Movie = require('../model/movies')
-const Review = require('../model/review')
+const Movies = require("../model/movies");
 
-
-exports.movies = async (req, res) => {
-
-    let result = await Movie.find({})
-
-    res.json(result)
-}
-
-exports.moviesTitles = async (req, res) => {
-    const rates = req.params.rates
-
-
-
-    let result = await Movie.where("title")
-    .equals(new RegExp(req.params.title, "i"))
-    .where("rated")
-    .equals(!!rates ? `${rates}` : {$exists: true, $ne: null})
-    .limit(req.params.limit || 20)
-    .skip(req.params.limit || 20 * req.params.pages || 0)
+exports.movies = async (req, res)=>{
+        try{
+        const title = req.query.title;
     
-
-    res.json(result)
-}
-
-exports.getRated = async (req, res) => {
-
-    const result = await Movie.distinct("rated")
-    res.json(result)
-}
-
-exports.getById = async (req, res) => {
-    const id = req.params.id
-
-    const result = await Movie.findById(id)
+        let results = await Movies.find({title: new RegExp(title, "i")})
+        .where("rated")
+        .equals(req.query.rated)
+        .limit(parseInt(req.query.limit) || 20)
+        .skip(parseInt(req.query.page))
     
-    res.json(result)
+        res.json(results)
+
+    }catch(error){
+        console.log("Can't connect to database");
+    }
+}
+
+exports.rating = async (req, res)=>{
+    try {
+
+        let ratings = await Movies.distinct("rated")
+    
+        res.json(ratings)
+    } catch (error) {
+        console.log("Can't connect to database");
+        
+    }
+}
+
+exports.searchById = async (req, res)=>{
+    try {
+    
+        const searchId = req.params.id
+        let oneMovie = await Movies.findById(searchId)
+    
+        res.json(oneMovie)
+    } catch (error) {
+        console.log("Can't connect to database");
+        
+    }
 }
