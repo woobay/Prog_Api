@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const reviewSherma = mongoose.Schema({
+const reviewSchema = mongoose.Schema({
     review: String,
     name: String,
     user_id: String,
@@ -9,4 +9,4 @@ const reviewSherma = mongoose.Schema({
 
 })
 
-module.exports = mongoose.model("Review", reviewSherma)
+module.exports = mongoose.model("Review", reviewSchema)

@@ -1,35 +1,43 @@
 const Movies = require("../model/movies");
 
-
-
 exports.movies = async (req, res)=>{
-    const title = req.query.title;
-    const rated = req.query.rated
-    const limite = parseInt(req.query.limite) || 20
-    const page = parseInt(req.query.page) || 0
+        try{
+        const title = req.query.title;
+    
+        let results = await Movies.find({title: new RegExp(title, "i")})
+        .where("rated")
+        .equals(req.query.rated)
+        .limit(parseInt(req.query.limit) || 20)
+        .skip(parseInt(req.query.page))
+    
+        res.json(results)
 
-    let results = await Movies.where("title")
-    .equals(new RegExp(title, "i"))
-    .where("rated")
-    .equals(rated)
-    .limit(limite)
-    .skip(page)
-
-    res.json(results)
+    }catch(error){
+        console.log("Can't connect to database");
+    }
 }
+
 exports.rating = async (req, res)=>{
+    try {
 
-    let ratings = await Movies.distinct("rated")
-
-    res.json(ratings)
+        let ratings = await Movies.distinct("rated")
+    
+        res.json(ratings)
+    } catch (error) {
+        console.log("Can't connect to database");
+        
+    }
 }
 
 exports.searchById = async (req, res)=>{
-    const searchId = req.params.id
-    // const searchId = {_id : req.params.id}
-
-    // let oneMovie = await Movies.findById(searchId)
-    let oneMovie = await Movies.findById(searchId)
-
-    res.json(oneMovie)
+    try {
+    
+        const searchId = req.params.id
+        let oneMovie = await Movies.findById(searchId)
+    
+        res.json(oneMovie)
+    } catch (error) {
+        console.log("Can't connect to database");
+        
+    }
 }
