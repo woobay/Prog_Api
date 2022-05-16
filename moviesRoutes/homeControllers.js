@@ -1,37 +1,35 @@
-const Movie = require('../model/movies')
-const Review = require('../model/review')
+const Movies = require("../model/movies");
 
 
-exports.movies = async (req, res) => {
 
-    let result = await Movie.find({})
+exports.movies = async (req, res)=>{
+    const title = req.query.title;
+    const rated = req.query.rated
+    const limite = parseInt(req.query.limite) || 20
+    const page = parseInt(req.query.page) || 0
 
-    res.json(result)
-}
-
-exports.moviesTitles = async (req, res) => {
-    const rates = req.params.rates
-
-    let result = await Movie.where("title")
-    .equals(new RegExp(req.params.title, "i"))
+    let results = await Movies.where("title")
+    .equals(new RegExp(title, "i"))
     .where("rated")
-    .equals(!!rates ? `${rates}` : {$exists: true, $ne: null})
-    .limit(req.params.limit || 20)
-    .skip(req.params.limit || 20 * req.params.pages || 0)
-    
-    res.json(result)
+    .equals(rated)
+    .limit(limite)
+    .skip(page)
+
+    res.json(results)
+}
+exports.rating = async (req, res)=>{
+
+    let ratings = await Movies.distinct("rated")
+
+    res.json(ratings)
 }
 
-exports.getRated = async (req, res) => {
+exports.searchById = async (req, res)=>{
+    const searchId = req.params.id
+    // const searchId = {_id : req.params.id}
 
-    const result = await Movie.distinct("rated")
-    res.json(result)
-}
+    // let oneMovie = await Movies.findById(searchId)
+    let oneMovie = await Movies.findById(searchId)
 
-exports.getById = async (req, res) => {
-    const id = req.params.id
-
-    const result = await Movie.findById(id)
-    
-    res.json(result)
+    res.json(oneMovie)
 }
